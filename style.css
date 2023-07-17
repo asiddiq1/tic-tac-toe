@@ -84,7 +84,6 @@ main{
 .players-turn{
     margin-top: 0;
     color: var(--red);
-    /* background-color: var(--yellow); */
 }
 
 @media screen and (max-width:400px){
