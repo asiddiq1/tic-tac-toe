@@ -81,13 +81,16 @@ const checkWinner = (board) => {
 
 }
 
-const switchColor = (cell, sign) => {
+const switchColor = (cell, sign, header) => {
     if (sign == 'X')
     {
         cell.style.color = '#E07A5F';
+        header.style.color = '#69A387';
+        
     }
     else{
         cell.style.color = '#69A387';
+        header.style.color = '#E07A5F';
     }
 
 }
@@ -113,7 +116,7 @@ const gameController = (player, board) => {
         let cell = document.querySelector('[data-row="'+ row +'"][data-col="'+ col +'"]')
         let currentPlayer = player.getCurrentPlayer();
         if (!cell.textContent){
-            switchColor(cell, currentPlayer);
+            switchColor(cell, currentPlayer, header);
             cell.textContent = currentPlayer
             player.switchPlayer();
             header.textContent = `Player ${player.getCurrentPlayer()}'s turn`;
@@ -125,6 +128,7 @@ const gameController = (player, board) => {
         if (winner){
             endGame = true;
             header.textContent = `Player ${winner} has won!`;
+
         }
         else if (checkDraw(board)){
             endGame = true;
@@ -135,17 +139,24 @@ const gameController = (player, board) => {
             }
     }
     
-    const playRound = (row, col) => {
+    const playRound = (row, col, cells) => {
         if (endGame) return;
         updateBoard(row, col);
         updateScreen(row, col);
         updateWinner();
+        if (endGame){
+            cells.forEach(cell => {
+                cell.classList.remove('hover');
+            });
+            header.style.color = "#bad7df";
+        };
     }
 
     const gameReset = () => {
         endGame = false;
         player = Player('X');
         header.textContent = "Player X's turn";
+        header.style.color = "#E07A5F";
     }
 
     return {playRound, gameReset};
@@ -164,6 +175,7 @@ const screenController = (() => {
         arr.forEach((cell, col) => {
             const cellDiv = document.createElement("div");
             cellDiv.classList.add('cell');
+            cellDiv.classList.add('hover');
             cellDiv.textContent = cell;
             cellDiv.dataset.row = row;
             cellDiv.dataset.col = col;
@@ -175,19 +187,20 @@ const screenController = (() => {
         gameBoard.reset();
         cells.forEach((cell) => {
             cell.textContent = '';
+            cell.classList.add('hover');
         })
         game.gameReset();
+
     }
 
+    const cells = Array.from(document.querySelectorAll('.cell'));
+    
     const placeItem = (event) => {
         let cell = event.target;
         let row =  cell.getAttribute("data-row");
         let col =  cell.getAttribute("data-col");
-        game.playRound(row, col);
-        
+        game.playRound(row, col, cells);
     }
-
-    const cells = Array.from(document.querySelectorAll('.cell'));
 
     cells.forEach((cell) => {
         cell.addEventListener('click', placeItem);

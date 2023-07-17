@@ -6,6 +6,7 @@
     --yellow: #F2CC8F;
     --purple: #3D405B;
     --blue: #bad7df;
+    --dark-red: #ac3e21;
 }
 
 body{
@@ -67,6 +68,7 @@ main{
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    color: black;
 
 }
 
@@ -74,14 +76,15 @@ main{
     transform: translateY(2px);
 }
 
-.cell:hover{
+.cell.hover:hover{
     background-color: var(--blue);
     cursor: pointer;
 }
 
 .players-turn{
     margin-top: 0;
-    color: var(--yellow);
+    color: var(--red);
+    /* background-color: var(--yellow); */
 }
 
 @media screen and (max-width:400px){
